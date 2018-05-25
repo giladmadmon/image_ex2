@@ -86,6 +86,7 @@
     <Compile Include="ImageService\Modal\IImageServiceModal.cs" />
     <Compile Include="ImageService\Modal\ImageServiceModal.cs" />
     <Compile Include="ImageService\Server\ImageServer.cs" />
+    <Compile Include="ImageService\Server\ServerCommunication.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectInstaller.cs">
       <SubType>Component</SubType>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ImageService.Communication.Interfaces {
     public interface ICommunicationChannel {
-        event EventHandler<DataRecievedEventArgs> OnDataRecieved;
+        event EventHandler<DataReceivedEventArgs> OnDataRecieved;
         void Close();
         bool Start();
     }

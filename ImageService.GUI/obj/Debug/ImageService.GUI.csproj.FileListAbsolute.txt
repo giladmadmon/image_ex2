@@ -21,3 +21,15 @@ C:\Users\Gilad\Documents\Visual Studio 2015\Projects\Bar Ilan\Adv 2\ex2_2\ImageS
 C:\Users\Gilad\Documents\Visual Studio 2015\Projects\Bar Ilan\Adv 2\ex2_2\ImageService.GUI\bin\Debug\ImageService.Logging.pdb
 C:\Users\Gilad\Documents\Visual Studio 2015\Projects\Bar Ilan\Adv 2\ex2_2\ImageService.GUI\bin\Debug\Newtonsoft.Json.dll
 C:\Users\Gilad\Documents\Visual Studio 2015\Projects\Bar Ilan\Adv 2\ex2_2\ImageService.GUI\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Gilad\Documents\Visual Studio 2015\Projects\Bar Ilan\Adv 2\ex2_2\ImageService.GUI\bin\Debug\ImageService.Communication.dll
+C:\Users\Gilad\Documents\Visual Studio 2015\Projects\Bar Ilan\Adv 2\ex2_2\ImageService.GUI\bin\Debug\ImageService.Infrastructure.dll
+C:\Users\Gilad\Documents\Visual Studio 2015\Projects\Bar Ilan\Adv 2\ex2_2\ImageService.GUI\bin\Debug\ImageService.Communication.pdb
+C:\Users\Gilad\Documents\Visual Studio 2015\Projects\Bar Ilan\Adv 2\ex2_2\ImageService.GUI\bin\Debug\ImageService.Infrastructure.pdb
+C:\Users\Gilad\Documents\Visual Studio 2015\Projects\Bar Ilan\Adv 2\ex2_2\ImageService.GUI\bin\Debug\Microsoft.Practices.ServiceLocation.dll
+C:\Users\Gilad\Documents\Visual Studio 2015\Projects\Bar Ilan\Adv 2\ex2_2\ImageService.GUI\bin\Debug\Prism.dll
+C:\Users\Gilad\Documents\Visual Studio 2015\Projects\Bar Ilan\Adv 2\ex2_2\ImageService.GUI\bin\Debug\Prism.Wpf.dll
+C:\Users\Gilad\Documents\Visual Studio 2015\Projects\Bar Ilan\Adv 2\ex2_2\ImageService.GUI\bin\Debug\System.Windows.Interactivity.dll
+C:\Users\Gilad\Documents\Visual Studio 2015\Projects\Bar Ilan\Adv 2\ex2_2\ImageService.GUI\bin\Debug\Microsoft.Practices.ServiceLocation.pdb
+C:\Users\Gilad\Documents\Visual Studio 2015\Projects\Bar Ilan\Adv 2\ex2_2\ImageService.GUI\bin\Debug\Microsoft.Practices.ServiceLocation.xml
+C:\Users\Gilad\Documents\Visual Studio 2015\Projects\Bar Ilan\Adv 2\ex2_2\ImageService.GUI\bin\Debug\Prism.xml
+C:\Users\Gilad\Documents\Visual Studio 2015\Projects\Bar Ilan\Adv 2\ex2_2\ImageService.GUI\bin\Debug\Prism.Wpf.xml

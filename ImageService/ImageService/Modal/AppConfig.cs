@@ -15,8 +15,8 @@ namespace ImageService.ImageService.Modal {
         public string ThumbnailSize { get; private set; }
 
         private List<string> m_Folders;
-        public string[] Folders {
-            get { return m_Folders.ToArray(); }
+        public List<string> Folders {
+            get { return m_Folders; }
             private set { m_Folders = new List<string>(value); }
         }
 
@@ -25,16 +25,18 @@ namespace ImageService.ImageService.Modal {
             this.LogName = ConfigurationManager.AppSettings["LogName"];
             this.OutputDirPath = ConfigurationManager.AppSettings["OutputDir"];
             this.ThumbnailSize = ConfigurationManager.AppSettings["ThunmbnailSize"];
-            this.Folders = ConfigurationManager.AppSettings["Handler"].Split(';');
+            this.Folders = new List<string>(ConfigurationManager.AppSettings["Handler"].Split(';'));
 
         }
 
-        public static AppConfig GetInstance() {
-            if(m_appConfig == null) {
-                m_appConfig = new AppConfig();
-            }
+        public static AppConfig Instance {
+            get {
+                if(m_appConfig == null) {
+                    m_appConfig = new AppConfig();
+                }
 
-            return m_appConfig;
+                return m_appConfig;
+            }
         }
     }
 }

@@ -15,8 +15,8 @@ namespace ImageService.Communication {
         private int m_port;
         private TcpListener m_listener;
 
-        public event EventHandler<DataRecievedEventArgs> OnDataSending;
-        public event EventHandler<DataRecievedEventArgs> OnDataRecieved;
+        public event EventHandler<DataReceivedEventArgs> OnDataSending;
+        public event EventHandler<DataReceivedEventArgs> OnDataRecieved;
 
         public TcpServerChannel(string ip, int port) {
             this.m_ip = ip;
@@ -48,13 +48,13 @@ namespace ImageService.Communication {
             }
         }
 
-        private void TcpServerChannel_OnDataSending(object sender, DataRecievedEventArgs e) {
+        private void TcpServerChannel_OnDataSending(object sender, DataReceivedEventArgs e) {
             throw new NotImplementedException();
         }
 
         public int Send(string data) {
             try {
-                OnDataSending?.Invoke(this, new DataRecievedEventArgs(data));
+                OnDataSending?.Invoke(this, new DataReceivedEventArgs(data));
                 return 1;
             } catch {
                 return 0;

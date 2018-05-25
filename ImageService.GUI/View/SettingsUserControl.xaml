@@ -29,8 +29,8 @@
         <Label x:Name="SourceNamePathLabel" Content="{Binding VM_SourceName}" Margin="0" Grid.Row="2" RenderTransformOrigin="0,1" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1"/>
         <Label x:Name="LogNameDataLabel" Content="{Binding VM_LogName}" Margin="0" Grid.Row="3" RenderTransformOrigin="0,1" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1"/>
         <Label x:Name="ThumbnailSizeDataLabel" Content="{Binding VM_ThumbnailSize}" Margin="0" Grid.Row="4" RenderTransformOrigin="0,1" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1"/>
-        <Button x:Name="RemoveButton" Grid.ColumnSpan="2" Content="Remove" Margin="0" Grid.Row="5" />
-        <ListBox x:Name="listBox" Grid.ColumnSpan="2" Margin="0" Grid.Row="6" ItemsSource="{Binding VM_Folders}">
+        <Button x:Name="RemoveButton" Command="{Binding RemoveCommand}" Grid.ColumnSpan="2" Content="Remove" Margin="0" Grid.Row="5" />
+        <ListBox x:Name="listBox" SelectedItem="{Binding VM_SelectedItem}" Grid.ColumnSpan="2" Margin="0" Grid.Row="6" ItemsSource="{Binding VM_Folders}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>

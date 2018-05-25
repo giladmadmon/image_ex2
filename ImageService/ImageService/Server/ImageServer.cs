@@ -13,14 +13,13 @@ using System.IO;
 using ImageService.Communication.Interfaces;
 using ImageService.Communication;
 using ImageService.Communication.Model;
+using ImageService.ImageService.Server;
+using ImageService.ImageService.Modal;
 
 namespace ImageService.Server {
     public class ImageServer {
 
         #region Members
-        private const string IP = "127.0.0.1";
-        private const int PORT = 8003;
-        private IClientCommunicationChannel m_server;
         private IImageController m_controller;
         private ILoggingService m_logging;
         #endregion
@@ -37,31 +36,9 @@ namespace ImageService.Server {
         public ImageServer(IImageController controller, ILoggingService logging) {
             this.m_controller = controller;
             this.m_logging = logging;
-            m_server = new TcpServerChannel(IP, PORT);
-            m_server.OnDataRecieved += OnServerDataRecieved;
-            m_logging.MessageRecieved += UpdateLogInServer;
         }
 
-        private void OnServerDataRecieved(object sender, Communication.Model.Event.DataRecievedEventArgs e) {
-            CommandMessage cmdMsg = CommandMessage.FromJSON(e.Data);
-            IClientCommunicationChannel receiver = (IClientCommunicationChannel)sender;
 
-            if(cmdMsg.CmdId == CommandEnum.CloseClientCommand) {
-                receiver.Close();
-            } else {
-                bool result;
-                string msg = m_controller.ExecuteCommand((int)cmdMsg.CmdId, cmdMsg.Args, out result);
-                if(msg != null) {
-                    receiver.Send(msg);
-                }
-            }
-        }
-
-        private void UpdateLogInServer(object sender, Logging.Modal.MessageRecievedEventArgs e) {
-            LogMessageRecord record = new LogMessageRecord(e.Message, e.Status);
-            CommandMessage cmd = new CommandMessage(CommandEnum.LogCommand, new string[] { record.ToJSON() });
-            m_server.Send(cmd.ToJSON());
-        }
 
         /// <summary>
         /// creating a new handler.
@@ -87,7 +64,7 @@ namespace ImageService.Server {
         /// <param name="path"> the path related to the command </param>
         public void sendCommand(CommandEnum commandId, string[] args, string path) {
             CommandRecievedEventArgs cmdEventArgs = new CommandRecievedEventArgs((int)commandId, args, path);
-            CommandRecieved(this, cmdEventArgs);
+            CommandRecieved?.Invoke(this, cmdEventArgs);
             m_logging.Log(path + " - " + commandId, Logging.Modal.MessageTypeEnum.INFO);
         }
         /// <summary>
@@ -99,12 +76,13 @@ namespace ImageService.Server {
             IDirectoryHandler dirHandler = (IDirectoryHandler)sender;
             CommandRecieved -= dirHandler.OnCommandRecieved;
             dirHandler.DirectoryClose -= CloseHandler;
+            AppConfig.Instance.Folders.Remove(eventArgs.DirectoryPath);
         }
         /// <summary>
         /// close all the handlers of the server
         /// </summary>
         public void CloseServer() {
-            sendCommand(CommandEnum.CloseCommand, new string[] { }, "");
+            sendCommand(CommandEnum.CloseCommand, new string[] { }, "*");
         }
     }
 }

@@ -15,6 +15,10 @@ using ImageService.Modal;
 using ImageService.Logging;
 using System.Security.Permissions;
 using ImageService.ImageService.Modal;
+using ImageService.Communication.Model;
+using ImageService.Communication.Interfaces;
+using ImageService.Infrastructure.Enums;
+using ImageService.ImageService.Server;
 
 public enum ServiceState {
     SERVICE_STOPPED = 0x00000001,
@@ -41,6 +45,7 @@ namespace ImageService {
     public partial class x : ServiceBase {
 
         private ImageServer m_imageServer;
+        private IImageController m_controller;
 
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
@@ -48,8 +53,8 @@ namespace ImageService {
         public x() {
             InitializeComponent();
 
-            string sourceName = AppConfig.GetInstance().SourceName;
-            string logName = AppConfig.GetInstance().LogName;
+            string sourceName =AppConfig.Instance.SourceName;
+            string logName = AppConfig.Instance.LogName;
 
             if(!EventLog.SourceExists(sourceName)) {
                 EventLog.CreateEventSource(sourceName, logName);
@@ -59,14 +64,17 @@ namespace ImageService {
         }
 
         protected override void OnStart(string[] args) {
-            string outptDir = AppConfig.GetInstance().OutputDirPath;
-            int thumbnailSize = Int32.Parse(AppConfig.GetInstance().ThumbnailSize);
-            string[] handlers = AppConfig.GetInstance().Folders;
+            string outptDir = AppConfig.Instance.OutputDirPath;
+            int thumbnailSize = Int32.Parse(AppConfig.Instance.ThumbnailSize);
+            List<string> handlers = AppConfig.Instance.Folders;
 
             IImageServiceModal modal = new ImageServiceModal(outptDir, thumbnailSize);
+
             ILoggingService logging = new LoggingService();
-            IImageController controller = new ImageController(modal, logging);
-            this.m_imageServer = new ImageServer(controller, logging);
+            logging.MessageRecieved += UpdateLogInServer;
+
+            m_controller = new ImageController(modal, logging);
+            this.m_imageServer = new ImageServer(m_controller, logging);
 
             logging.MessageRecieved += (sender, msgReceived) => {
                 this.EventLogger.WriteEntry(msgReceived.Message, (EventLogEntryType)msgReceived.Status);
@@ -75,6 +83,8 @@ namespace ImageService {
             foreach(string handler in handlers) {
                 this.m_imageServer.createHandler(handler);
             }
+
+            ServerCommunication.Instance.OnDataReceived += OnServerDataRecieved;
 
             this.EventLogger.WriteEntry("Service Started");
         }
@@ -87,5 +97,35 @@ namespace ImageService {
         private void EventLogger_EntryWritten(object sender, EntryWrittenEventArgs e) {
 
         }
+
+        #region ServerCommunication events
+        private void OnServerDataRecieved(object sender, Communication.Model.Event.DataReceivedEventArgs e) {
+            CommandMessage cmdMsg = CommandMessage.FromJSON(e.Data);
+            IClientCommunicationChannel receiver = (IClientCommunicationChannel)sender;
+            string msg = null;
+
+            if(cmdMsg.CmdId == CommandEnum.CloseClientCommand) {
+                receiver.Close();
+            } else if(cmdMsg.CmdId == CommandEnum.CloseCommand) {
+                m_imageServer.sendCommand(CommandEnum.CloseCommand, new string[] { }, cmdMsg.Args[0]);
+                ServerCommunication.Instance.Send(new CommandMessage(CommandEnum.CloseCommand, cmdMsg.Args).ToJSON());
+            } else {
+                bool result;
+                msg = m_controller.ExecuteCommand((int)cmdMsg.CmdId, cmdMsg.Args, out result);
+            }
+
+            if(msg != null) {
+                receiver.Send(msg);
+            }
+        }
+
+        private void UpdateLogInServer(object sender, Logging.Modal.MessageRecievedEventArgs e) {
+            LogMessageRecord record = new LogMessageRecord(e.Message, e.Status);
+            CommandMessage cmd = new CommandMessage(CommandEnum.LogCommand, new string[] { record.ToJSON() });
+            ServerCommunication.Instance.Send(cmd.ToJSON());
+        }
+
+        #endregion
+
     }
 }

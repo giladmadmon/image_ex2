@@ -94,8 +94,10 @@ namespace ImageService.Controller.Handlers
             string message;
             if (e.CommandID == (int)CommandEnum.CloseCommand)
             {
-                DirectoryCloseEventArgs dirCloseArgs = new DirectoryCloseEventArgs(m_path, "CLOSE");
-                DirectoryClose(this, dirCloseArgs);
+                if(e.RequestDirPath.Equals("*") || e.RequestDirPath.Equals(m_path)) {
+                    DirectoryCloseEventArgs dirCloseArgs = new DirectoryCloseEventArgs(m_path, "CLOSE");
+                    DirectoryClose?.Invoke(this, dirCloseArgs);
+                }
                 return;
             }
             else

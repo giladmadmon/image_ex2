@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <TabControl x:Name="tabControl" Margin="10,10,0,-0.333">
+        <TabControl x:Name="tabControl" Margin="0">
             <TabItem Header="Settings">
                 <local:SettingsUserControl/>
             </TabItem>

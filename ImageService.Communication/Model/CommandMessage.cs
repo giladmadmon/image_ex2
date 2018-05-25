@@ -25,9 +25,12 @@ namespace ImageService.Communication.Model {
         public string ToJSON() {
             JObject commandMessage = new JObject();
             commandMessage["CmdId"] = (int)this.CmdId;
+
+            JObject args = new JObject();
             for(int i = 1; i <= this.Args.Length; ++i) {
-                commandMessage["Args"][i] = (string)this.Args[i - 1];
+                args[i.ToString()] = (string)this.Args[i - 1];
             }
+            commandMessage["Args"] = args;
             commandMessage["ArgsNum"] = this.Args.Length;
 
             return commandMessage.ToString();
@@ -40,7 +43,7 @@ namespace ImageService.Communication.Model {
             int cmdId = (int)commandMessage["CmdId"];
             string[] args = new string[size];
             for(int i = 1; i <= size; ++i) {
-               args[i-1] = (string)commandMessage["Args"][i];
+               args[i-1] = (string)commandMessage["Args"][i.ToString()];
             }
 
             return new CommandMessage((CommandEnum)cmdId,args);

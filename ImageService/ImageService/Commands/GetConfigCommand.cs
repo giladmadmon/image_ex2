@@ -20,7 +20,7 @@ namespace ImageService.ImageService.Commands {
         /// <param name="result"> the result of the execution </param>
         /// <returns>The String Will Return the New Path if result = true, and will return the error message</returns>
         public string Execute(string[] args, out bool result) {
-            AppConfig appConfig = AppConfig.GetInstance();
+            AppConfig appConfig = AppConfig.Instance;
             List<string> configs = new List<string>();
 
             configs.Add(appConfig.SourceName);
@@ -30,7 +30,7 @@ namespace ImageService.ImageService.Commands {
             configs.Add(String.Join(";", appConfig.Folders));
 
             result = true;
-            return new CommandMessage(CommandEnum.GetConfigCommand, configs.ToArray()).ToString();
+            return new CommandMessage(CommandEnum.GetConfigCommand, configs.ToArray()).ToJSON();
         }
     }
 

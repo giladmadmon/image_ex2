@@ -24,5 +24,9 @@ namespace ImageService.GUI.View {
             InitializeComponent();
             DataContext = new SettingsViewModel(new SettingsModel());
         }
+
+        private void listBox_LostFocus(object sender, RoutedEventArgs e) {
+
+        }
     }
 }

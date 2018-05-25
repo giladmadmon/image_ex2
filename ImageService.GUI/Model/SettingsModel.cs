@@ -1,10 +1,13 @@
-﻿using System;
+﻿using ImageService.Communication.Model;
+using ImageService.Infrastructure.Enums;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace ImageService.GUI.Model {
     class SettingsModel : ISettingsModel {
@@ -17,12 +20,35 @@ namespace ImageService.GUI.Model {
         public event PropertyChangedEventHandler PropertyChanged;
 
         public SettingsModel() {
-            m_Folders = new ObservableCollection<string>();
-            m_Folders.CollectionChanged += (sender, e) => NotifyProperyChanged("Folders");
+            Folders = new ObservableCollection<string>();
+            BindingOperations.EnableCollectionSynchronization(Folders, new object());
+            Folders.CollectionChanged += (sender, e) => NotifyProperyChanged("Folders");
+
+            ClientCommunication.Instance.OnDataRecieved += Instance_OnDataRecieved;
+            ClientCommunication.Instance.OnDataRecieved += Instance_OnDataRecieved1;
+            ;
+            ClientCommunication.Instance.Send(new CommandMessage(CommandEnum.GetConfigCommand, new string[] { }));
         }
 
-        private void M_Folders_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            throw new NotImplementedException();
+        private void Instance_OnDataRecieved1(object sender, Communication.Model.Event.DataReceivedEventArgs e) {
+            CommandMessage cmdMsg = CommandMessage.FromJSON(e.Data);
+            if(cmdMsg.CmdId == CommandEnum.CloseCommand) {
+                Folders.Remove(cmdMsg.Args[0]);
+            }
+        }
+
+        private void Instance_OnDataRecieved(object sender, Communication.Model.Event.DataReceivedEventArgs e) {
+            CommandMessage cmdMsg = CommandMessage.FromJSON(e.Data);
+            if(cmdMsg.CmdId == CommandEnum.GetConfigCommand) {
+                this.SourceName = cmdMsg.Args[0];
+                this.LogName = cmdMsg.Args[1];
+                this.OutputDirPath = cmdMsg.Args[2];
+                this.ThumbnailSize = cmdMsg.Args[3];
+                foreach(string folder in cmdMsg.Args[4].Trim().Split(';')) {
+                    if(!folder.Equals(""))
+                        Folders.Add(folder);
+                }
+            }
         }
 
         public string LogName {

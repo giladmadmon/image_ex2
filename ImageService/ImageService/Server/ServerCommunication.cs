@@ -19,6 +19,12 @@ namespace ImageService.ImageService.Server {
             remove { m_server.OnDataRecieved -= value; }
         }
 
+        /// <summary>
+        /// Gets the instance.
+        /// </summary>
+        /// <value>
+        /// The instance.
+        /// </value>
         public static ServerCommunication Instance {
             get {
                 if(m_serverCommunication == null) {
@@ -28,11 +34,18 @@ namespace ImageService.ImageService.Server {
             }
         }
 
+        /// <summary>
+        /// Prevents a default instance of the <see cref="ServerCommunication"/> class from being created.
+        /// </summary>
         private ServerCommunication() {
             m_server = new TcpServerChannel(IP, PORT);
             m_server.Start();
         }
 
+        /// <summary>
+        /// Sends the specified data.
+        /// </summary>
+        /// <param name="data">The data.</param>
         public void Send(string data) {
             m_server.Send(data);
         }

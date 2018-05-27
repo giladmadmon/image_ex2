@@ -20,6 +20,9 @@ namespace ImageService.ImageService.Modal {
             private set { m_Folders = new List<string>(value); }
         }
 
+        /// <summary>
+        /// Prevents a default instance of the <see cref="AppConfig"/> class from being created.
+        /// </summary>
         private AppConfig() {
             this.SourceName = ConfigurationManager.AppSettings["SourceName"];
             this.LogName = ConfigurationManager.AppSettings["LogName"];
@@ -29,6 +32,12 @@ namespace ImageService.ImageService.Modal {
 
         }
 
+        /// <summary>
+        /// Gets the instance.
+        /// </summary>
+        /// <value>
+        /// The instance.
+        /// </value>
         public static AppConfig Instance {
             get {
                 if(m_appConfig == null) {

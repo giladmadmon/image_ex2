@@ -18,6 +18,9 @@ namespace ImageService.GUI.Model {
 
         public LogMessageRecords LogMessages { set; get; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LogModel"/> class.
+        /// </summary>
         public LogModel() {
             LogMessages = new LogMessageRecords();
             BindingOperations.EnableCollectionSynchronization(LogMessages, new object());
@@ -26,13 +29,13 @@ namespace ImageService.GUI.Model {
             ClientCommunication.Instance.OnDataRecieved += AddLogs;
             ClientCommunication.Instance.Send(new Communication.Model.CommandMessage
                 (Infrastructure.Enums.CommandEnum.LogCommand, new string[] { }));
-
-            //////////delete afterrrrrrr
-            LogMessages.Add(new LogMessageRecord("FAIL", MessageTypeEnum.FAIL));
-            LogMessages.Add(new LogMessageRecord("WARN", MessageTypeEnum.WARNING));
-            LogMessages.Add(new LogMessageRecord("INFO", MessageTypeEnum.INFO));
         }
 
+        /// <summary>
+        /// Adds the logs to the logs list.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="Communication.Model.Event.DataReceivedEventArgs"/> instance containing the event data.</param>
         private void AddLogs(object sender, Communication.Model.Event.DataReceivedEventArgs e) {
             try {
                 CommandMessage cmdMsg = CommandMessage.FromJSON(e.Data);
@@ -46,6 +49,10 @@ namespace ImageService.GUI.Model {
             } catch { }
         }
 
+        /// <summary>
+        /// Notifies the propery changed.
+        /// </summary>
+        /// <param name="name">The name of the property.</param>
         private void NotifyProperyChanged(string name) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }

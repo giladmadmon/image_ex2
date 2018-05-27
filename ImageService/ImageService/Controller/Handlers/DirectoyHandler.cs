@@ -95,6 +95,7 @@ namespace ImageService.Controller.Handlers
             if (e.CommandID == (int)CommandEnum.CloseCommand)
             {
                 if(e.RequestDirPath.Equals("*") || e.RequestDirPath.Equals(m_path)) {
+                    m_dirWatcher.EnableRaisingEvents = false;
                     DirectoryCloseEventArgs dirCloseArgs = new DirectoryCloseEventArgs(m_path, "CLOSE");
                     DirectoryClose?.Invoke(this, dirCloseArgs);
                 }

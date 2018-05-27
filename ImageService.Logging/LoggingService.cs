@@ -9,15 +9,28 @@ using System.Threading.Tasks;
 namespace ImageService.Logging {
     public class LoggingService : ILoggingService {
         private LogMessageRecords m_LogMessages;
+
+        public event EventHandler<MessageRecievedEventArgs> MessageRecieved;
+
+        /// <summary>
+        /// Gets the log messages.
+        /// </summary>
+        /// <value>
+        /// The log messages.
+        /// </value>
         public LogMessageRecords LogMessages {
             get { return new LogMessageRecords(m_LogMessages); }
             private set { m_LogMessages = value; }
         }
-        public event EventHandler<MessageRecievedEventArgs> MessageRecieved;
 
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LoggingService"/> class.
+        /// </summary>
         public LoggingService() {
             LogMessages = new LogMessageRecords();
         }
+
         /// <summary>
         /// Logs the specified message.
         /// </summary>

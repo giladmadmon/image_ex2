@@ -15,33 +15,66 @@ namespace ImageService.Communication {
         private BinaryReader m_reader;
         private BinaryWriter m_writer;
 
+        public bool Connected { get; private set; }
+
         public event EventHandler<DataReceivedEventArgs> OnDataRecieved;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TcpClientChannel"/> class.
+        /// </summary>
+        /// <param name="ip">The ip.</param>
+        /// <param name="port">The port.</param>
         public TcpClientChannel(string ip, int port) {
-            m_client = new TcpClient();
-            m_client.Connect(ip, port);
+            try {
+                m_client = new TcpClient();
+                m_client.Connect(ip, port);
+                Connected = true;
+            } catch {
+                Connected = false;
+            }
             InitClient();
         }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TcpClientChannel"/> class.
+        /// </summary>
+        /// <param name="client">The client.</param>
         public TcpClientChannel(TcpClient client) {
             m_client = client;
             InitClient();
         }
 
+        /// <summary>
+        /// Initializes the client streams.
+        /// </summary>
         private void InitClient() {
-            m_stream = m_client.GetStream();
-            m_reader = new BinaryReader(m_stream);
-            m_writer = new BinaryWriter(m_stream);
+            try {
+                m_stream = m_client.GetStream();
+                m_reader = new BinaryReader(m_stream);
+                m_writer = new BinaryWriter(m_stream);
+            } catch {
+                Connected = false;
+            }
         }
 
+        /// <summary>
+        /// Closes this communication channel.
+        /// </summary>
         public void Close() {
+            if(!Connected)
+                return;
+
             m_reader.Close();
             m_writer.Close();
             m_stream.Close();
             m_client.Close();
+            Connected = false;
         }
 
+        /// <summary>
+        /// Starts listening to messages.
+        /// </summary>
+        /// <returns></returns>
         public bool Start() {
             new Task(() => {
-                char[] buffer = new char[1024];
                 try {
                     while(true) {
                         string data = m_reader.ReadString();
@@ -56,6 +89,11 @@ namespace ImageService.Communication {
             return true;
         }
 
+        /// <summary>
+        /// Sends the specified data.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <returns></returns>
         public int Send(string data) {
             try {
                 m_writer.Write(data.Trim());

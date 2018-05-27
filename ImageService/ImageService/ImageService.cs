@@ -49,6 +49,9 @@ namespace ImageService {
 
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
+        /// <summary>
+        /// Initializes a new instance of the <see cref="x"/> class.
+        /// </summary>
         [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         public x() {
             InitializeComponent();
@@ -63,6 +66,12 @@ namespace ImageService {
             this.EventLogger.Source = sourceName;
         }
 
+        /// <summary>
+        /// When implemented in a derived class, executes when a Start command is sent to the service 
+        /// by the Service Control Manager (SCM) or when the operating system starts 
+        /// (for a service that starts automatically). Specifies actions to take when the service starts.
+        /// </summary>
+        /// <param name="args">Data passed by the start command.</param>
         protected override void OnStart(string[] args) {
             string outptDir = AppConfig.Instance.OutputDirPath;
             int thumbnailSize = Int32.Parse(AppConfig.Instance.ThumbnailSize);
@@ -89,16 +98,21 @@ namespace ImageService {
             this.EventLogger.WriteEntry("Service Started");
         }
 
+        /// <summary>
+        /// When implemented in a derived class, executes when a Stop command is sent to the service by 
+        /// the Service Control Manager (SCM). Specifies actions to take when a service stops running.
+        /// </summary>
         protected override void OnStop() {
             m_imageServer.CloseServer();
             this.EventLogger.WriteEntry("Service Stopped");
         }
 
-        private void EventLogger_EntryWritten(object sender, EntryWrittenEventArgs e) {
-
-        }
-
         #region ServerCommunication events
+        /// <summary>
+        /// Called when [server data recieved].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="Communication.Model.Event.DataReceivedEventArgs"/> instance containing the event data.</param>
         private void OnServerDataRecieved(object sender, Communication.Model.Event.DataReceivedEventArgs e) {
             CommandMessage cmdMsg = CommandMessage.FromJSON(e.Data);
             IClientCommunicationChannel receiver = (IClientCommunicationChannel)sender;
@@ -119,6 +133,11 @@ namespace ImageService {
             }
         }
 
+        /// <summary>
+        /// Updates the log in server.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="Logging.Modal.MessageRecievedEventArgs"/> instance containing the event data.</param>
         private void UpdateLogInServer(object sender, Logging.Modal.MessageRecievedEventArgs e) {
             LogMessageRecord record = new LogMessageRecord(e.Message, e.Status);
             CommandMessage cmd = new CommandMessage(CommandEnum.LogCommand, new string[] { record.ToJSON() });

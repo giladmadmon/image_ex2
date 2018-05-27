@@ -103,7 +103,6 @@ namespace ImageService.Modal
                 using (Image myImage = Image.FromStream(fs, false, false))
                 {
                     PropertyItem propItem = myImage.GetPropertyItem(PICTURE_TAKING_TIME_PROP);
-                    /////////////////////////////////////////////////////////////////// CHECK REGEX
                     Regex r = new Regex(":");
                     string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
                     creationTime = DateTime.Parse(dateTaken);

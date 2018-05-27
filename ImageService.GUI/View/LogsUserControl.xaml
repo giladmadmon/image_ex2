@@ -10,43 +10,35 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <converters:LogTypeConverter x:Key="logTypeConverter"/>
+        <Style x:Key ="Title">
+            <Setter Property="TextBlock.FontSize" Value = "20" />
+            <Setter Property="TextBlock.FontWeight" Value = "Bold" />
+            <Setter Property="TextBlock.Foreground" Value="Green"/>
+            <Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
+            <Setter Property="TextBlock.HorizontalAlignment" Value="Center"/>
+        </Style>
     </UserControl.Resources>
-    <Grid Background="#FFE5E5E5">
+    <Grid Background="Transparent">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="70"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="25"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Label x:Name="LogsLabel" Content="Logs" Grid.ColumnSpan="2" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="20"/>
-        <Label x:Name="TypeLabel" Content="Type" Margin="0" Grid.Row="1" RenderTransformOrigin="0,1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-        <Label x:Name="MessageLabel" Content=" Message" Margin="0" Grid.Row="1" Grid.Column="1" RenderTransformOrigin="0,1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-        <ListBox ItemsSource="{Binding VM_LogMessages}" Grid.Row="2" Grid.ColumnSpan="2">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="70"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock HorizontalAlignment="Stretch" Margin="0" Text="{Binding Path=Type}" Background="{Binding Path=Type, Converter={StaticResource logTypeConverter}}" Grid.Column="0"/>
-                        <TextBlock Text="{Binding Path=Message, StringFormat=' {0}'}" Margin="0" Grid.Column="1"/>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-  <!--
-        <ListBox ItemsSource="{Binding VM_LogMessages}" Grid.Row="2" Grid.Column="1" >
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Stretch" Margin="0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Background="#FF5F1F1F"  Grid.Row="2"/>
-    --></Grid>
+        <Label x:Name="LogsLabel" Content="Logs" Grid.ColumnSpan="2" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Style="{StaticResource Title}"/>
+        <DataGrid x:Name="LogDataGrid" Background="Transparent" Grid.Row="2" Grid.ColumnSpan="2" ItemsSource="{Binding VM_LogMessages}" AutoGenerateColumns="False" IsReadOnly="True" ScrollViewer.CanContentScroll="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="70" CanUserResize="False">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Background" Value="{Binding Type, Converter={StaticResource logTypeConverter}}"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Message" Binding="{Binding Message}" CanUserResize="False"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
 </UserControl>

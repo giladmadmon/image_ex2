@@ -22,6 +22,10 @@ namespace ImageService.Communication.Model {
             this.Args = args;
 
         }
+        /// <summary>
+        /// Turn CommandMessage to JSON format.
+        /// </summary>
+        /// <returns></returns>
         public string ToJSON() {
             JObject commandMessage = new JObject();
             commandMessage["CmdId"] = (int)this.CmdId;
@@ -36,6 +40,11 @@ namespace ImageService.Communication.Model {
             return commandMessage.ToString();
         }
 
+        /// <summary>
+        /// Turn JSON format to CommandMessage.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <returns></returns>
         public static CommandMessage FromJSON(string str) {
 
             JObject commandMessage = JObject.Parse(str);

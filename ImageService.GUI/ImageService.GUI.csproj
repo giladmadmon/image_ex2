@@ -79,8 +79,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\ConnectedConverter.cs" />
     <Compile Include="Converters\LogTypeConverter.cs" />
-    <Compile Include="Model\CommunicationSingleton.cs" />
+    <Compile Include="Model\ClientCommunication.cs" />
     <Compile Include="Model\ISettingsModel.cs" />
     <Compile Include="Model\LogModel.cs" />
     <Compile Include="Model\SettingsModel.cs" />

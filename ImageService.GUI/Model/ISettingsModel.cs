@@ -13,8 +13,5 @@ namespace ImageService.GUI.Model {
         string LogName { get; set; }
         string ThumbnailSize { get; set; }
         ObservableCollection<string> Folders { get; set; }
-
-        void ResetSettings();
-
     }
 }

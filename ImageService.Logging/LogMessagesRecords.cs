@@ -19,6 +19,10 @@ namespace ImageService.Logging {
             this.Type = type;
         }
 
+        /// <summary>
+        /// Turn LogMessageRecord to JSON format.
+        /// </summary>
+        /// <returns></returns>
         public string ToJSON() {
             JObject logMessage = new JObject();
 
@@ -28,6 +32,11 @@ namespace ImageService.Logging {
             return logMessage.ToString();
         }
 
+        /// <summary>
+        /// Turns JSON format to LogMessageRecord.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <returns></returns>
         public static LogMessageRecord FromJSON(string str) {
             JObject logMsgObj = JObject.Parse(str);
 
@@ -45,6 +54,10 @@ public class LogMessageRecords : ObservableCollection<LogMessageRecord> {
     public LogMessageRecords() { }
     public LogMessageRecords(LogMessageRecords logMsgRcrds) : base(logMsgRcrds) { }
 
+    /// <summary>
+    /// Turn LogMessageRecords to JSON format.
+    /// </summary>
+    /// <returns></returns>
     public string ToJSON() {
         JObject logMessageRecords = new JObject();
         logMessageRecords["Size"] = this.Count;
@@ -59,6 +72,11 @@ public class LogMessageRecords : ObservableCollection<LogMessageRecord> {
         return logMessageRecords.ToString();
     }
 
+    /// <summary>
+    /// Turns JSON format to LogMessageRecords.
+    /// </summary>
+    /// <param name="str">The string.</param>
+    /// <returns></returns>
     public static LogMessageRecords FromJSON(string str) {
         LogMessageRecords logMsgs = new LogMessageRecords();
         JObject logMsgsObj = JObject.Parse(str);

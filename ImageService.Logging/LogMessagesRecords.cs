@@ -52,6 +52,10 @@ namespace ImageService.Logging {
 public class LogMessageRecords : ObservableCollection<LogMessageRecord> {
 
     public LogMessageRecords() { }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="LogMessageRecords"/> class.
+    /// </summary>
+    /// <param name="logMsgRcrds">Log messages collection.</param>
     public LogMessageRecords(LogMessageRecords logMsgRcrds) : base(logMsgRcrds) { }
 
     /// <summary>

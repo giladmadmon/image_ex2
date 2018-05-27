@@ -45,7 +45,7 @@ namespace ImageService.GUI.Model {
 
 
         /// <summary>
-        /// Occurs when [on data recieved].
+        /// Occurs when the client receives data.
         /// </summary>
         public event EventHandler<DataReceivedEventArgs> OnDataRecieved {
             add { m_client.OnDataRecieved += value; }
